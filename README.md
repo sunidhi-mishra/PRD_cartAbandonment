@@ -3,11 +3,10 @@
 ---
 
 ## 🏢 Context
-
-- Product: E-commerce marketplace app  
-- Platform: Mobile-first (Android/iOS + Web)  
-- Geography: India  
-- Users: Tier 1–3 shoppers  
+- **Product:** E-commerce marketplace app  
+- **Platform:** Mobile-first (Android/iOS)  
+- **Geography:** India  
+- **Users:**  Tier 1–3 shoppers with mixed payment preferences (UPI, Card, COD)    
 
 ---
 
@@ -15,238 +14,125 @@
 
 - Owned end-to-end PRD creation  
 - Defined problem using funnel analysis  
-- Designed UX + system-level solutions  
-- Defined metrics & experimentation plan  
+- Synthesized competing hypotheses across teams  
+- Proposed solutions across UX + engineering  
+- Designed metrics, guardrails, and experiment strategy  
 
 ---
 
 ## 🔍 Problem
 
-65% of users abandon carts, with the highest drop-off at the **payment step**.
+65% of users abandon their carts before purchasing, with a major drop-off at the **payment step**.
 
-### Hypotheses
-1. Payment failures (UPI/card)
-2. COD not visible early
-3. Hidden fees
-4. Slow load times
+### Key Hypotheses
+1. 💳 Unreliable payment flows (UPI/card failures)  
+2. 💵 COD not visible early in checkout  
+3. 💸 Hidden fees (shipping/taxes appear late)  
+4. ⏱️ Slow payment page load  
+
+👉 Result: Users feel **surprised, frustrated, and lose trust**, leading to lost GMV.
 
 ---
 
 ## ⚠️ Assumptions
 
-- UX friction drives abandonment more than pricing  
-- COD demand is high in Tier 2/3  
-- Payment failures reduce trust  
-
----
-
-## 🗺️ Approach
-
-### Phase 1 (4 weeks)
-- Instrumentation
-- Fee transparency
-- COD visibility
-- Performance fixes
-
-### Phase 2
-- Redesign based on insights
-
----
-
-## 👤 Narrative
-
-### Priya
-- Sees ₹349 → final ₹490 → abandons (trust break)
-
-### Rahul
-- Can’t find COD → abandons (uncertainty)
+- Majority abandonment is driven by **UX friction**, not pricing  
+- COD demand is significantly higher in **Tier 2/3 cities**  
+- Payment failures reduce **trust and repeat purchase intent**  
+- Users value **predictability over discounts** in checkout  
 
 ---
 
 ## 🎯 Goals
 
-- Abandonment: 65% → 50%
-- Payment drop-off: -30%
-- Completion rate: +20%
+- Abandonment: **65% → 50%**  
+- Payment drop-off: **-30%**  
+- Checkout completion: **+20%**
 
 ---
 
-## 📊 Metrics
-
-### North Star
-- CCR: 35% → 50%
-
-### Guardrails
-- AOV stable (±3%)
-- Fraud stable
-- Returns stable
+## 📊 North Star Metric
+**Checkout Completion Rate (CCR)**  
+- Current: 35% → Target: 50%
 
 ---
 
 ## 💰 Impact
 
-₹78 Cr/month incremental GMV
+- 10M monthly carts  
+- 10% recovery → 650K orders  
+- AOV ₹1,200  
+
+👉 **₹78 Cr/month incremental GMV**
 
 ---
 
-## 🚫 Non Goals
+## 🧩 Solution Strategy
 
-- No pricing changes
-- No new payment methods
-- No discovery redesign
-
----
-
-## ✅ Solution Scope
-
-### In
-- Fee transparency
-- COD visibility
-- Payment recovery
-- Performance optimization
-
-### Out
-- BNPL / EMI
-- Loyalty
-
----
-
-## 🧩 Features
-
-- Instrumentation (P0)
-- Fee transparency (P0)
-- COD visibility (P0)
-- Payment recovery (P1)
-- Load optimization (P1)
-
----
-
-## 🔁 Key Flows
-
----
-
-### Flow 1: Fee Transparency
-
-#### PDP
-- Show shipping + tax estimate
-- Prompt for pincode
-
-#### Cart
-- Show full breakdown
-- Tooltip: "How calculated"
-
-#### Payment
-- No new fees
-
-#### Edge Cases
-- Cart change → recalc fees  
-- Pincode change → update fees  
-- API down → fallback message  
-- Undeliverable item → block checkout  
-
----
-
-### Flow 2: COD Discovery
-
-#### Cart
-- Show "COD available" badge
-
-#### Payment
-- COD shown first
-
-#### Edge Cases
-- Not eligible → no badge  
-- Pincode change → badge removed  
-- Mixed cart → COD disabled  
-- API timeout → fail-safe hide  
-
----
-
-### Flow 3: Payment Failure Recovery
-
-#### Payment Attempt
-- User pays via UPI/card
-
-#### Failure Screen
-- Retry
-- Alternate method
-- COD option
-- Support CTA
-
-#### Edge Cases
-- Timeout → treat as failure  
-- Double failure → suggest COD  
-- App closed → recover state  
-- No COD → fallback options  
-
----
-
-## ⚙️ Key Logic
-
-- Fees shown before checkout  
-- COD checked at cart  
-- Retry after first failure  
-- Load time <2s  
-
----
-
-## 🚀 Launch Plan
-
-### Phase 1
-- Instrumentation + quick wins
+### Phase 1 (4 weeks)
+- Funnel instrumentation  
+- Fee transparency  
+- COD visibility  
+- Performance fixes  
 
 ### Phase 2
-- A/B testing
-
-### Phase 3
-- Full rollout
+- Data-driven checkout redesign  
 
 ---
 
-## 🧪 Experiment Design
+## 🔁 Key Solutions
 
-- A/B test  
-- 500K users/variant  
-- Success: +10% CCR  
+### 1. Fee Transparency
+- Show shipping + tax on PDP & cart  
+- No surprises at payment  
 
-### Gray Zone
-- 5–9% improvement → evaluate  
+### 2. COD Visibility
+- Show COD availability on cart  
+- Prioritize COD in payment  
 
----
+### 3. Payment Recovery
+- Detect failures instantly  
+- Show retry + alternate methods + COD  
 
-## 🔗 Dependencies
-
-- Payments API (failure detection)
-- Logistics API (pincode lookup)
-
-### Contingency
-- Fallback fee estimates  
-- Static messaging  
+### 4. Performance
+- Payment load time <2s  
 
 ---
 
-## 👥 RACI (Simplified)
+## ⚙️ Core Rules
 
-| Workstream | PM | FE | Payments | Logistics | Data |
-|-----------|----|----|----------|----------|------|
-| Instrumentation | A | R | C | I | R |
-| Fee transparency | A | R | C | R | C |
-| COD visibility | A | R | I | R | C |
-| Payment recovery | A | R | R | I | C |
+- Fees visible before checkout  
+- COD checked at cart stage  
+- Show alternatives after first failure  
+
+---
+
+## 🚫 Non-Goals
+
+- No pricing/discount changes  
+- No new payment methods  
+- No discovery redesign  
+
+---
+
+
+## 👥 Dependencies
+
+- Payments API (failure detection)  
+- Logistics API (pincode + COD)  
 
 ---
 
 ## 🚀 Next Steps
 
-- Cohort analysis  
-- Segment users  
-- Optimize low-end devices  
+- Segment COD vs prepaid users  
+- Optimize for low-end devices  
+- Analyze payment failure logs  
 
 ---
 
 ## ⭐ Why This PRD
 
-- Clear thinking  
-- Strong metrics  
-- Real constraints  
-- Execution-ready  
+- Clear problem → solution mapping  
+- Metrics-driven approach  
+- Real-world constraints considered  

@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cart Abandonment Reduction – Checkout Experience PRD</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg:           #F5F4F0;
+    --surface:      #FFFFFF;
+    --border:       #E4E2DC;
+    --border-mid:   #CEC9BF;
+    --txt:          #1C1B18;
+    --txt-2:        #6B6860;
+    --txt-3:        #9E9B95;
+
+    --indigo:       #3D3BB5;
+    --indigo-lt:    #EEEDF9;
+    --indigo-mid:   #8483D1;
+
+    --teal:         #0B7B6A;
+    --teal-lt:      #E2F4F0;
+    --teal-mid:     #3CBEA8;
+
+    --amber:        #9A5B0A;
+    --amber-lt:     #FDF3E2;
+    --amber-mid:    #F0A830;
+
+    --red:          #B03030;
+    --red-lt:       #FCEEEE;
+    --red-mid:      #E27070;
+
+    --slate:        #3A3A40;
+    --slate-lt:     #F0EFF4;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--txt);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ─── LAYOUT ─── */
+  .wrap { max-width: 900px; margin: 0 auto; padding: 48px 28px 100px; }
+
+  /* ─── COVER ─── */
+  .cover {
+    background: var(--slate);
+    border-radius: 16px;
+    padding: 52px 52px 44px;
+    margin-bottom: 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    right: -60px; bottom: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.04);
+    pointer-events: none;
+  }
+  .cover-eyebrow {
+    font-size: 11px; font-weight: 500;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: rgba(255,255,255,.4);
+    margin-bottom: 14px;
+  }
+  .cover h1 {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: 38px; font-weight: 400; line-height: 1.2;
+    color: #fff;
+    margin-bottom: 32px;
+  }
+  .cover-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .cover-stat {
+    padding: 16px 20px;
+    border-right: 1px solid rgba(255,255,255,.1);
+  }
+  .cover-stat:last-child { border-right: none; }
+  .cover-stat-label { font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.35); margin-bottom: 4px; }
+  .cover-stat-value { font-family: 'Instrument Serif', serif; font-size: 18px; color: rgba(255,255,255,.9); }
+
+  /* ─── TOC ─── */
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 44px;
+  }
+  .toc-eyebrow { font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--txt-3); margin-bottom: 14px; }
+  .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .toc-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--txt-2);
+    font-size: 13px;
+    transition: color .15s;
+  }
+  .toc-item:nth-last-child(-n+2) { border-bottom: none; }
+  .toc-item:hover { color: var(--indigo); }
+  .toc-n { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--txt-3); min-width: 22px; }
+
+  /* ─── SECTIONS ─── */
+  section { margin-bottom: 56px; scroll-margin-top: 20px; }
+
+  .sh {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 22px;
+  }
+  .sh-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .sh-meta { display: flex; flex-direction: column; gap: 1px; }
+  .sh-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--txt-3); }
+  h2 { font-family: 'Instrument Serif', serif; font-size: 26px; font-weight: 400; color: var(--txt); }
+  h3 {
+    font-size: 11px; font-weight: 500;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--txt-3);
+    margin: 28px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  p { margin-bottom: 12px; }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 10px;
+  }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
+
+  /* ─── CALLOUTS ─── */
+  .callout {
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    border: 1px solid;
+  }
+  .callout-indigo { background: var(--indigo-lt); border-color: var(--indigo-mid); }
+  .callout-amber  { background: var(--amber-lt);  border-color: var(--amber-mid); }
+  .callout-teal   { background: var(--teal-lt);   border-color: var(--teal-mid); }
+  .callout-red    { background: var(--red-lt);    border-color: var(--red-mid); }
+  .cl-label { font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+  .callout-indigo .cl-label { color: var(--indigo); }
+  .callout-amber  .cl-label { color: var(--amber); }
+  .callout-teal   .cl-label { color: var(--teal); }
+  .callout-red    .cl-label { color: var(--red); }
+
+  /* ─── BADGES ─── */
+  .badge {
+    display: inline-block;
+    font-size: 10px; font-weight: 500;
+    letter-spacing: .07em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 4px;
+  }
+  .badge-p0 { background: var(--amber-lt); color: var(--amber); border: 1px solid var(--amber-mid); }
+  .badge-p1 { background: var(--indigo-lt); color: var(--indigo); border: 1px solid var(--indigo-mid); }
+  .badge-p2 { background: var(--teal-lt); color: var(--teal); border: 1px solid var(--teal-mid); }
+
+  /* ─── METRIC CARDS ─── */
+  .mcard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  .mval {
+    font-family: 'Instrument Serif', serif;
+    font-size: 30px; color: var(--indigo);
+    line-height: 1; margin-bottom: 4px;
+  }
+  .mlabel { font-size: 12px; color: var(--txt-2); font-weight: 400; }
+  .msub { font-size: 11px; color: var(--teal); margin-top: 4px; font-weight: 500; }
+  .mstar { font-family: 'Instrument Serif', serif; font-size: 28px; color: var(--amber); line-height: 1; margin-bottom: 4px; }
+
+  /* ─── FEATURE TABLE ─── */
+  .feat-table { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .feat-head {
+    display: grid; grid-template-columns: 200px 64px 1fr 72px;
+    gap: 12px; padding: 10px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .feat-head span { font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--txt-3); }
+  .feat-row {
+    display: grid; grid-template-columns: 200px 64px 1fr 72px;
+    gap: 12px; padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+  .feat-row:last-child { border-bottom: none; }
+  .feat-name { font-weight: 500; font-size: 14px; }
+  .feat-desc { font-size: 13px; color: var(--txt-2); }
+  .size-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--txt-2);
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 4px; padding: 2px 6px;
+    display: inline-block;
+  }
+
+  /* ─── NON-GOALS ─── */
+  .ng-row { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+  .ng-row:last-child { border-bottom: none; }
+  .ng-x {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--red-lt); border: 1px solid var(--red-mid);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: var(--red); flex-shrink: 0; margin-top: 2px;
+  }
+  .ng-title { font-weight: 500; font-size: 14px; }
+  .ng-why { font-size: 13px; color: var(--txt-2); margin-top: 2px; }
+
+  /* ─── BEFORE / AFTER ─── */
+  .ba { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .ba-b { background: var(--red-lt); border: 1px solid var(--red-mid); border-radius: 10px; padding: 18px 20px; }
+  .ba-a { background: var(--teal-lt); border: 1px solid var(--teal-mid); border-radius: 10px; padding: 18px 20px; }
+  .ba-label { font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
+  .ba-b .ba-label { color: var(--red); }
+  .ba-a .ba-label { color: var(--teal); }
+
+  /* ─── PERSONAS ─── */
+  .persona { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px; position: relative; }
+  .persona-tag { position: absolute; top: 16px; right: 16px; font-size: 10px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; }
+  .tag-common { background: var(--indigo-lt); color: var(--indigo); }
+  .tag-edge   { background: var(--amber-lt);  color: var(--amber); }
+  .pname { font-family: 'Instrument Serif', serif; font-size: 20px; margin-bottom: 3px; }
+  .psub  { font-size: 12px; color: var(--txt-2); margin-bottom: 12px; }
+
+  /* ─── IMPACT CALC ─── */
+  .calc-step { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .calc-step:last-child { border-bottom: none; }
+  .calc-n { width: 26px; height: 26px; border-radius: 50%; background: var(--txt); color: #fff; font-size: 11px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .calc-v { font-weight: 500; color: var(--indigo); }
+  .impact-result { background: var(--slate); color: #fff; border-radius: 10px; padding: 20px 26px; margin-top: 14px; display: flex; align-items: center; justify-content: space-between; }
+  .ir-label { font-size: 12px; color: rgba(255,255,255,.5); margin-bottom: 3px; }
+  .ir-value { font-family: 'Instrument Serif', serif; font-size: 30px; }
+  .conf-pill { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); padding: 6px 14px; border-radius: 20px; font-size: 12px; }
+
+  /* ─── IN / OUT ─── */
+  .inout { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .inout-in  { background: var(--teal-lt); border: 1px solid var(--teal-mid); border-radius: 10px; padding: 18px 20px; }
+  .inout-out { background: var(--red-lt);  border: 1px solid var(--red-mid);  border-radius: 10px; padding: 18px 20px; }
+  .inout-hd { font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 12px; }
+  .inout-in  .inout-hd { color: var(--teal); }
+  .inout-out .inout-hd { color: var(--red); }
+  .inout-li { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; margin-bottom: 8px; }
+  .inout-li::before { content: ''; display: block; width: 5px; height: 5px; border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
+  .inout-in  .inout-li::before { background: var(--teal); }
+  .inout-out .inout-li::before { background: var(--red); }
+
+  /* ─── OPEN QUESTIONS ─── */
+  .oq { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .oq:last-child { border-bottom: none; }
+  .oq-q { font-family: 'Instrument Serif', serif; font-size: 22px; color: var(--indigo-mid); flex-shrink: 0; line-height: 1.3; }
+
+  /* ─── PHASE CARDS ─── */
+  .phase { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 22px; margin-bottom: 8px; }
+  .phase-ph { font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+  .phase-title { font-weight: 500; font-size: 15px; margin-bottom: 8px; }
+  .phase-meta { display: grid; grid-template-columns: 1fr 1fr 80px; gap: 10px; margin-top: 10px; }
+  .pm-item span:first-child { font-size: 10px; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; color: var(--txt-3); display: block; }
+  .pm-item span:last-child { font-size: 13px; }
+
+  /* ─── FLOW STEPS ─── */
+  .fstep { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 4px; }
+  .fstep-hd { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .fstep-n { width: 22px; height: 22px; border-radius: 50%; background: var(--indigo); color: #fff; font-size: 11px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .fstep-screen { font-weight: 500; font-size: 14px; }
+  .frow { display: flex; gap: 10px; margin-bottom: 5px; font-size: 13px; }
+  .flabel { font-size: 10px; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; color: var(--txt-3); min-width: 78px; margin-top: 2px; flex-shrink: 0; }
+  .farrow { text-align: center; color: var(--txt-3); font-size: 16px; margin: 2px 0; }
+
+  /* ─── EDGE CASES ─── */
+  .ec { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px dashed var(--border); font-size: 13px; }
+  .ec:last-child { border-bottom: none; }
+  .ec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); margin-top: 7px; flex-shrink: 0; }
+
+  /* ─── RULES ─── */
+  .rule { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 8px; }
+  .rule-title { font-weight: 500; font-size: 14px; margin-bottom: 6px; }
+  .rule-when { font-size: 12px; color: var(--txt-2); margin-top: 6px; }
+  .rule-eg { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; margin-top: 8px; }
+
+  /* ─── RACI ─── */
+  .raci-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow-x: auto; }
+  .raci-wrap table { width: 100%; border-collapse: collapse; min-width: 540px; }
+  .raci-wrap th { font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--txt-3); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); background: var(--bg); }
+  .raci-wrap td { padding: 11px 14px; font-size: 13px; border-bottom: 1px solid var(--border); }
+  .raci-wrap tr:last-child td { border-bottom: none; }
+  .r { font-weight: 500; color: var(--indigo); }
+  .a { font-weight: 500; color: var(--amber); }
+  .c { font-weight: 500; color: var(--teal); }
+  .i { font-weight: 500; color: var(--txt-3); }
+
+  /* ─── GUARDRAIL ITEMS ─── */
+  .gi { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .gi:last-child { border-bottom: none; }
+  .gi-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex-shrink: 0; margin-top: 6px; }
+
+  /* ─── DIAGRAMS WRAPPER ─── */
+  .diagram-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin: 14px 0; overflow-x: auto; }
+  .diagram-label { font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--txt-3); margin-bottom: 14px; }
+
+  /* ─── INTERACTIVE: ACCORDION ─── */
+  .acc { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+  .acc-hd {
+    width: 100%; background: var(--surface); border: none;
+    padding: 14px 20px; cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+    color: var(--txt); text-align: left;
+    transition: background .15s;
+  }
+  .acc-hd:hover { background: var(--bg); }
+  .acc-arrow { transition: transform .25s; color: var(--txt-3); font-size: 18px; }
+  .acc-hd.open .acc-arrow { transform: rotate(180deg); }
+  .acc-body { display: none; padding: 14px 20px; background: var(--bg); border-top: 1px solid var(--border); font-size: 13px; }
+  .acc-body.open { display: block; }
+
+  /* ─── INTERACTIVE: TABS ─── */
+  .tabs { margin: 14px 0; }
+  .tab-bar { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 0; }
+  .tab-btn {
+    padding: 9px 16px; border: none; background: none;
+    font-family: 'DM Sans', sans-serif; font-size: 13px;
+    color: var(--txt-2); cursor: pointer;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+    transition: color .15s, border-color .15s;
+  }
+  .tab-btn.active { color: var(--indigo); border-bottom-color: var(--indigo); font-weight: 500; }
+  .tab-panel { display: none; padding: 20px 0; }
+  .tab-panel.active { display: block; }
+
+  /* ─── INTERACTIVE: PROGRESS INDICATOR ─── */
+  .progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin: 6px 0; }
+  .progress-fill { height: 100%; background: var(--indigo); border-radius: 2px; transition: width .6s ease; }
+
+  /* ─── FOOTER ─── */
+  .footer { text-align: center; font-size: 12px; color: var(--txt-3); margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); }
+
+  @media (max-width: 640px) {
+    .cover { padding: 32px 24px; }
+    .cover h1 { font-size: 28px; }
+    .cover-stats { grid-template-columns: 1fr 1fr; }
+    .grid-2, .grid-3, .grid-4, .ba, .inout, .toc-grid { grid-template-columns: 1fr; }
+    .feat-head, .feat-row { grid-template-columns: 1fr; }
+    .phase-meta { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ══════════════ COVER ══════════════ -->
+<div class="cover">
+  <div class="cover-eyebrow">Product Requirements Document</div>
+  <h1>Cart Abandonment Reduction<br>Checkout Experience</h1>
+  <div class="cover-stats">
+    <div class="cover-stat">
+      <div class="cover-stat-label">Abandonment Rate</div>
+      <div class="cover-stat-value">65% → 50%</div>
+    </div>
+    <div class="cover-stat">
+      <div class="cover-stat-label">GMV Opportunity</div>
+      <div class="cover-stat-value">₹78 Cr / mo</div>
+    </div>
+    <div class="cover-stat">
+      <div class="cover-stat-label">Timeline</div>
+      <div class="cover-stat-value">16 Weeks</div>
+    </div>
+    <div class="cover-stat">
+      <div class="cover-stat-label">Approach</div>
+      <div class="cover-stat-value">2-Phase</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ TOC ══════════════ -->
+<div class="toc">
+  <div class="toc-eyebrow">Contents</div>
+  <div class="toc-grid">
+    <a href="#problem"      class="toc-item"><span class="toc-n">01</span>Problem Statement</a>
+    <a href="#metrics"      class="toc-item"><span class="toc-n">06</span>Metrics</a>
+    <a href="#approach"     class="toc-item"><span class="toc-n">02</span>High-Level Approach</a>
+    <a href="#impact"       class="toc-item"><span class="toc-n">07</span>Impact Sizing</a>
+    <a href="#narrative"    class="toc-item"><span class="toc-n">03</span>Narrative & Personas</a>
+    <a href="#nongoals"     class="toc-item"><span class="toc-n">08</span>Non-Goals</a>
+    <a href="#goals"        class="toc-item"><span class="toc-n">04</span>Goals</a>
+    <a href="#solution"     class="toc-item"><span class="toc-n">09</span>Solution Alignment</a>
+    <a href="#hypotheses"   class="toc-item"><span class="toc-n">05</span>Competing Hypotheses</a>
+    <a href="#features"     class="toc-item"><span class="toc-n">10</span>Key Features</a>
+    <a href="#future"       class="toc-item"><span class="toc-n">11</span>Future Considerations</a>
+    <a href="#flows"        class="toc-item"><span class="toc-n">12</span>Key Flows</a>
+    <a href="#logic"        class="toc-item"><span class="toc-n">13</span>Key Logic & Rules</a>
+    <a href="#launch"       class="toc-item"><span class="toc-n">14</span>Launch Plan</a>
+    <a href="#stakeholders" class="toc-item"><span class="toc-n">15</span>Stakeholders & Milestones</a>
+    <a href="#"             class="toc-item" style="visibility:hidden"></a>
+  </div>
+</div>
+
+
+<!-- ══════════════ 01 PROBLEM ══════════════ -->
+<section id="problem">
+  <div class="sh">
+    <div class="sh-icon" style="background:var(--red-lt);">🔍</div>
+    <div class="sh-meta"><div class="sh-num">01</div><h2>Problem Statement</h2></div>
+  </div>
+  <p>65% of users abandon their carts before purchasing, with a significant drop-off specifically at the payment step. Internal data and funnel analytics point to four competing hypotheses, each backed by a different team:</p>
+  <div class="grid-2" style="margin-top:14px;">
+    <div class="card" style="border-left:3px solid var(--red);">
+      <div style="font-size:18px;margin-bottom:6px;">💳</div>
+      <div style="font-weight:500;font-size:14px;margin-bottom:4px;">Hypothesis 1</div>
+      <div style="font-size:13px;color:var(--txt-2);">Unreliable payment flows (frequent UPI/card failures)</div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--amber);">
+      <div style="font-size:18px;margin-bottom:6px;">💵</div>
+      <div style="font-weight:500;font-size:14px;margin-bottom:4px;">Hypothesis 2</div>
+      <div style="font-size:13px;color:var(--txt-2);">Lack of visible Cash on Delivery (COD) options early in the checkout</div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--indigo);">
+      <div style="font-size:18px;margin-bottom:6px;">💸</div>
+      <div style="font-weight:500;font-size:14px;margin-bottom:4px;">Hypothesis 3</div>
+      <div style="font-size:13px;color:var(--txt-2);">Unexpected additional fees (shipping or taxes) surfacing only at the final step</div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--teal);">
+      <div style="font-size:18px;margin-bottom:6px;">⏱️</div>
+      <div style="font-weight:500;font-size:14px;margin-bottom:4px;">Hypothesis 4</div>
+      <div style="font-size:13px;color:var(--txt-2);">Slow page loads on the payment screen</div>
+    </div>
+  </div>
+  <div class="callout callout-red" style="margin-top:14px;">
+    <div class="cl-label">Business Impact</div>
+    <p style="margin:0;font-size:13px;">Customers experience surprise or frustration, eroding trust and leading to lost business. The opportunity is material: recovering even a portion of this lost GMV directly lifts top-line revenue.</p>
+  </div>
+</section>
+
+
+<!-- ══════════════ 02 APPROACH ══════════════ -->
+<section id="approach">
+  <div class="sh">
+    <div class="sh-icon" style="background:var(--indigo-lt);">🗺️</div>
+    <div class="sh-meta"><div class="sh-num">02</div><h2>High-Level Approach</h2></div>
+  </div>
+  <p>Pursue a phased solution.</p>
+  <div class="grid-2">
+    <div class="card" style="border-top:3px solid var(--amber);">
+      <span class="badge badge-p0" style="margin-bottom:10px;">Phase 1 · 4 Weeks</span>
+      <div style="font-weight:500;font-size:15px;margin-bottom:6px;">Diagnostic + Quick Wins</div>
+      <p style="font-size:13px;margin:0;">A focused, 4-week diagnostic and quick-win sprint: instrument the funnel granularly, immediately fix low-hanging issues (fee transparency, COD visibility), and optimize obvious technical bottlenecks (load time)—all based on minimal engineering lift.</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--indigo);">
+      <span class="badge badge-p1" style="margin-bottom:10px;">Phase 2 · Follows Phase 1</span>
+      <div style="font-weight:500;font-size:15px;margin-bottom:6px;">Full Checkout Redesign</div>
+      <p style="font-size:13px;margin:0;">A full checkout redesign, but <em>only after collecting hard evidence</em> on exact failure points from Phase 1. This minimizes risk of wasted resources and directly targets the hypothesized causes.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════ 03 NARRATIVE ══════════════ -->
+<section id="narrative">
+  <div class="sh">
+    <div class="sh-icon" style="background:var(--slate-lt);">👤</div>
+    <div class="sh-meta"><div class="sh-num">03</div><h2>Narrative & Personas</h2></div>
+  </div>
+  <div class="grid-2" style="margin-bottom:14px;">
+    <div class="persona">
+      <span class="persona-tag tag-common">Common use case</span>
+      <div class="pname">Priya, 28</div>
+      <div class="psub">Marketing Executive · Bengaluru · Mobile shopper</div>
+      <p style="font-size:13px;">Priya finds a phone case she likes — ₹349, seems reasonable. She taps "Buy Now," enters her address, and reaches the payment screen. For the first time, she sees a ₹99 shipping fee and ₹42 in taxes appended to her total. That's a <strong>40% price jump</strong> from what she'd mentally committed to paying. She doesn't abandon because she's cheap — she abandons because she feels deceived. She closes the app and buys from a competitor whose product page showed her the full price upfront.</p>
+    </div>
+    <div class="persona">
+      <span class="persona-tag tag-edge">Edge case</span>
+      <div class="pname">Rahul, 34</div>
+      <div class="psub">Schoolteacher · Gorakhpur · First high-value purchase</div>
+      <p style="font-size:13px;">Rahul is buying a water purifier — his first online purchase above ₹5,000. He's already nervous about online payments. He scrolls through the checkout carefully, looking for Cash on Delivery. He doesn't see it mentioned until the final payment screen, and even there it's listed in small text below the UPI and card options. He misses it entirely, assumes COD isn't available, and abandons — not because he couldn't pay, but because <strong>the interface didn't give him the reassurance he needed</strong> at the moment he needed it.</p>
+    </div>
+  </div>
+  <h3>Before / After</h3>
+  <div class="ba">
+    <div class="ba-b">
+      <div class="ba-label">Today</div>
+      <p style="font-size:13px;margin:0;">Checkout is a funnel of escalating anxiety. Each new screen can introduce a new cost, a missing option, or a failed transaction. By the time users reach the payment screen, trust is already fragile — one surprise breaks it entirely.</p>
+    </div>
+    <div class="ba-a">
+      <div class="ba-label">After</div>
+      <p style="font-size:13px;margin:0;">Priya sees the ₹99 shipping fee on the product page before she even adds to cart. Rahul sees a green "Cash on Delivery available in Gorakhpur" badge the moment he opens his cart. The experience surfaces the answer to his unspoken question before he has to ask.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════ 04 GOALS ══════════════ -->
+<section id="goals">
+  <div class="sh">
+    <div class="sh-icon" style="background:var(--teal-lt);">🎯</div>
+    <div class="sh-meta"><div class="sh-num">04</div><h2>Goals</h2></div>
+  </div>
+  <h3>Measurable goals</h3>
+  <div class="grid-3">
+    <div class="mcard">
+      <div class="mval">65→50%</div>
+      <div class="mlabel">Cart abandonment rate</div>
+      <div class="msub">Within 90 days of Phase 2 launch</div>
+    </div>
+    <div class="mcard">
+      <div class="mval">−30%</div>
+      <div class="mlabel">Payment step drop-off</div>
+      <div class="msub">From current baseline</div>
+    </div>
+    <div class="mcard">
+      <div class="mval">+20%</div>
+      <div class="mlabel">Checkout completion</div>
+      <div class="msub">From baseline</div>
+    </div>
+  </div>
+  <h3>Immeasurable goals</h3>
+  <div class="card" style="display:flex;flex-direction:column;gap:10px;">
+    <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="font-size:20px;">😌</span> Users should feel <strong>confident</strong> and <strong>unsurprised</strong> throughout checkout.</div>
+    <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="font-size:20px;">⚡</span> The experience should feel <strong>fast</strong>, <strong>transparent</strong>, and <strong>trustworthy</strong>.</div>
+  </div>
+</section>
+
+
+<!-- ══════════════ 05 HYPOTHESES ══════════════ -->
+<section id="hypotheses">
+  <div class="sh">
+    <div class="sh-icon" style="background:var(--amber-lt);">🔬</div>
+    <div class="sh-meta"><div class="sh-num">05</div><h2>Competing Hypotheses</h2></div>
+  </div>
+  <p>Funnel diagram showing where each hypothesis maps to a drop-off point:</p>
+
+  <div class="diagram-wrap">
+    <div class="diagram-label">Checkout funnel & hypothesis mapping</div>
+    <svg width="100%" viewBox="0 0 680 520">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- Funnel stages left column -->
+      <!-- Stage 1: Browse / PDP -->
+      <g>
+        <rect x="40" y="20" width="200" height="52" rx="8" fill="#EEEDF9" stroke="#8483D1" stroke-width="0.5"/>
+        <text font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#3D3BB5" x="140" y="44" text-anchor="middle" dominant-baseline="central">Browse / PDP</text>
+        <text font-family="DM Sans,sans-serif" font-size="11" fill="#6B6860" x="140" y="60" text-anchor="middle" dominant-baseline="central">Shopper discovers product</text>
+      </g>
+
+      <!-- Arrow 1 -->
+      <line x1="140" y1="72" x2="140" y2="100" stroke="#CEC9BF" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Stage 2: Cart -->
+      <g>
+        <rect x="40" y="100" width="200" height="52" rx="8" fill="#EEEDF9" stroke="#8483D1" stroke-width="0.5"/>
+        <text font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#3D3BB5" x="140" y="124" text-anchor="middle" dominant-baseline="central">Cart page</text>
+        <text font-family="DM Sans,sans-serif" font-size="11" fill="#6B6860" x="140" y="140" text-anchor="middle" dominant-baseline="central">Review items & fees</text>
+      </g>
+
+      <!-- Arrow 2 -->
+      <line x1="140" y1="152" x2="140" y2="180" stroke="#CEC9BF" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Stage 3: Address / Delivery -->
+      <g>
+        <rect x="40" y="180" width="200" height="52" rx="8" fill="#EEEDF9" stroke="#8483D1" stroke-width="0.5"/>
+        <text font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#3D3BB5" x="140" y="204" text-anchor="middle" dominant-baseline="central">Address / Delivery</text>
+        <text font-family="DM Sans,sans-serif" font-size="11" fill="#6B6860" x="140" y="220" text-anchor="middle" dominant-baseline="central">Enter shipping address</text>
+      </g>
+
+      <!-- Arrow 3 -->
+      <line x1="140" y1="232" x2="140" y2="260" stroke="#CEC9BF" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Stage 4: Payment — highlighted as drop-off zone -->
+      <g>
+        <rect x="40" y="260" width="200" height="52" rx="8" fill="#FDF3E2" stroke="#F0A830" stroke-width="1.5"/>
+        <text font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#9A5B0A" x="140" y="284" text-anchor="middle" dominant-baseline="central">Payment screen</text>
+        <text font-family="DM Sans,sans-serif" font-size="11" fill="#9A5B0A" x="140" y="300" text-anchor="middle" dominant-baseline="central">Major drop-off point</text>
+      </g>
+
+      <!-- Arrow 4 -->
+      <line x1="140" y1="312" x2="140" y2="340" stroke="#CEC9BF" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Stage 5: Order Confirmation -->
+      <g>
+        <rect x="40" y="340" width="200" height="52" rx="8" fill="#E2F4F0" stroke="#3CBEA8" stroke-width="0.5"/>
+        <text font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#0B7B6A" x="140" y="364" text-anchor="middle" dominant-baseline="central">Order confirmation</text>
+        <text font-family="DM Sans,sans-serif" font-size="11" fill="#0B7B6A" x="140" y="380" text-anchor="middle" dominant-baseline="central">Purchase complete</text>
+      </g>
+
+      <!-- ── Hypothesis callouts right side ── -->
+
+      <!-- H3: Cart page (fees) -->
+      <line x1="240" y1="126" x2="310" y2="126" stroke="#E27070" stroke-width="1" stroke-dasharray="4 3" fill="none"/>
+      <rect x="310" y="104" width="218" height="44" rx="6" fill="#FCEEEE" stroke="#E27070" stroke-width="0.5"/>
+      <text font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#B03030" x="322" y="122" dominant-baseline="central">H3 — Surprise fees</text>
+      <text font-family="DM Sans,sans-serif" font-size="10" fill="#B03030" x="322" y="138" dominant-baseline="central">Hidden until final step</text>
+
+      <!-- H2: COD visibility -->
+      <line x1="240" y1="286" x2="310" y2="250" stroke="#F0A830" stroke-width="1" stroke-dasharray="4 3" fill="none"/>
+      <rect x="310" y="228" width="218" height="44" rx="6" fill="#FDF3E2" stroke="#F0A830" stroke-width="0.5"/>
+      <text font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#9A5B0A" x="322" y="246" dominant-baseline="central">H2 — COD not visible</text>
+      <text font-family="DM Sans,sans-serif" font-size="10" fill="#9A5B0A" x="322" y="262" dominant-baseline="central">Buried below other options</text>
+
+      <!-- H1: Payment failures -->
+      <line x1="240" y1="286" x2="310" y2="300" stroke="#8483D1" stroke-width="1" stroke-dasharray="4 3" fill="none"/>
+      <rect x="310" y="278" width="218" height="44" rx="6" fill="#EEEDF9" stroke="#8483D1" stroke-width="0.5"/>
+      <text font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#3D3BB5" x="322" y="296" dominant-baseline="central">H1 — Payment failures</text>
+      <text font-family="DM Sans,sans-serif" font-size="10" fill="#3D3BB5" x="322" y="312" dominant-baseline="central">UPI/card errors, no fallback</text>
+
+      <!-- H4: Slow loads -->
+      <line x1="240" y1="286" x2="310" y2="350" stroke="#3CBEA8" stroke-width="1" stroke-dasharray="4 3" fill="none"/>
+      <rect x="310" y="328" width="218" height="44" rx="6" fill="#E2F4F0" stroke="#3CBEA8" stroke-width="0.5"/>
+      <text font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#0B7B6A" x="322" y="346" dominant-baseline="central">H4 — Slow page load</text>
+      <text font-family="DM Sans,sans-serif" font-size="10" fill="#0B7B6A" x="322" y="362" dominant-baseline="central">Payment screen latency</text>
+
+      <!-- drop-off annotation at payment -->
+      <text font-family="DM Sans,sans-serif" font-size="10" font-weight="500" fill="#9A5B0A" x="50" y="415" dominant-baseline="central">65% of shoppers abandon here</text>
+      <line x1="48" y1="426" x2="240" y2="426" stroke="#F0A830" stroke-width="1"/>
+      <path d="M46 420 L40 426 L46 432" fill="none" stroke="#F0A830" stroke-width="1" stroke-linecap="round"/>
+      <path d="M242 420 L248 426 L242 432" fill="none" stroke="#F0A830" stroke-width="1" stroke-linecap="round"/>
+    </svg>
+  </div>
+</section>
+
+
+<!-- ══════════════ 06 METRICS ══════════════ -->
+<section id="metrics">
+  <div class="sh">
+    <div class="sh-icon" style="background:var(--indigo-lt);">📊</div>
+    <div class="sh-meta"><div class="sh-num">06</div><h2>Metrics</h2></div>
+  </div>
+
+  <h3>North star metric</h3>
+  <div class="card" style="border:2px solid var(--amber-mid);display:flex;gap:28px;flex-wrap:wrap;align-items:center;">
+    <div style="text-align:center;">
+      <div class="mstar">CCR</div>
+      <div class="mlabel">Checkout Completion Rate</div>
+    </div>
+    <div style="flex:1;min-width:200px;">
+      <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+        <div><div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;font-weight:500;color:var(--txt-3);">Current</div><div style="font-size:22px;font-weight:500;font-family:'Instrument Serif',serif;">~35%</div></div>
+        <div style="font-size:22px;color:var(--txt-3);">→</div>
+        <div><div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;font-weight:500;color:var(--teal);">Target</div><div style="font-size:22px;font-weight:500;font-family:'Instrument Serif',serif;color:var(--teal);">50%</div></div>
+      </div>
+      <!-- Progress bar interactive element -->
+      <div style="font-size:11px;color:var(--txt-3);margin-bottom:4px;">Current progress toward target</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:35%;"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--txt-3);margin-top:3px;"><span>0%</span><span>35% today</span><span>50% target</span></div>
+      <div style="font-size:12px;color:var(--txt-2);margin-top:8px;">Measurement: Web/app analytics, event funnel tracking from cart to order confirmation</div>
+    </div>
+  </div>
+
+  <h3>Secondary metrics</h3>
+  <div class="card">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="gi"><div class="gi-dot" style="background:var(--indigo);"></div><div><strong>Payment step drop-off rate:</strong> 65% → 45%</div></div>
+      <div class="gi"><div class="gi-dot" style="background:var(--indigo);"></div><div><strong>COD selection rate:</strong> Monitor for increase as COD discovery improves</div></div>
+      <div class="gi"><div class="gi-dot" style="background:var(--indigo);"></div><div><strong>Avg. page load (payment screen):</strong> Target &lt;2s</div></div>
+      <div class="gi" style="border-bottom:none;"><div class="gi-dot" style="background:var(--indigo);"></div><div><strong>Fee-related support tickets:</strong> Track for reduction</div></div>
+    </div>
+  </div>
+
+  <h3>Guardrail metrics</h3>
+  <div class="card" style="border-left:4px solid var(--red);">
+    <div class="gi"><div class="gi-dot"></div><div><strong>Average order value (AOV):</strong> Must remain within 3% of baseline (any drop &gt;3% unacceptable)</div></div>
+    <div class="gi"><div class="gi-dot"></div><div><strong>Payment fraud rate:</strong> Must not increase above current</div></div>
+    <div class="gi"><div class="gi-dot"></div><div><strong>Return rate:</strong> Must remain flat (do not induce more product returns)</div></div>
+    <div class="gi" style="border-bottom:none;">
+      <div class="gi-dot"></div>
+      <div>
+        <strong>COD-specific return rate:</strong> Must not exceed overall return rate baseline by more than 5 percentage points. A spike here indicates COD visibility is recovering low-intent carts, not genuine demand.
+        <div class="callout callout-amber" style="margin-top:8px;">
+          <div class="cl-label">Trigger</div>
+          Triggers a review of COD eligibility rules if breached.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════ 07 IMPACT ══════════════ -->
+<section id="impact">
+  <div class="sh">
+    <div class="sh-icon" style="background:var(--teal-lt);">💰</div>
+    <div class="sh-meta"><div class="sh-num">07</div><h2>Impact Sizing Model</h2></div>
+  </div>
+  <h3>Calculation</h3>
+  <div class="card">
+    <div class="calc-step"><div class="calc-n">1</div><div style="font-size:14px;"><strong>Monthly cart sessions:</strong> <span class="calc-v">10 million</span> — source: analytics backend</div></div>
+    <div class="calc-step"><div class="calc-n">2</div><div style="font-size:14px;"><strong>Cart abandon rate:</strong> 65% → <span class="calc-v">6,500,000 abandoned carts/month</span></div></div>
+    <div class="calc-step"><div class="calc-n">3</div><div style="font-size:14px;"><strong>Average order value:</strong> <span class="calc-v">₹1,200</span> — source: historical GMV data</div></div>
+    <div class="calc-step"><div class="calc-n">4</div><div style="font-size:14px;"><strong>Recoverable percentage:</strong> Assume 10% of abandoned carts are recoverable via these solutions (<span class="calc-v">650,000 incremental completed orders</span>)</div></div>
+    <div class="calc-step" style="border-bottom:none;"><div class="calc-n">5</div><div style="font-size:14px;"><strong>Incremental monthly GMV:</strong> 650,000 × ₹1,200 = <span class="calc-v">₹78 crore/month</span></div></div>
+  </div>
+  <div class="impact-result">
+    <div>
+      <div class="ir-label">Estimated Incremental GMV</div>
+      <div class="ir-value">₹78 crore / month</div>
+    </div>
+    <div class="conf-pill">Medium confidence</div>
+  </div>
+  <div class="callout callout-amber" style="margin-top:10px;">
+    <div class="cl-label">Key assumption</div>
+    The above estimate assumes that most abandonment is due to UX frictions (solvable), and not price-sensitivity (less addressable via UX).
+  </div>
+</section>
+
+
+<!-- ══════════════ 08 NON-GOALS ══════════════ -->
+<section id="nongoals">
+  <div class="sh">
+    <div class="sh-icon" style="background:var(--red-lt);">🚫</div>
+    <div class="sh-meta"><div class="sh-num">08</div><h2>Non-Goals</h2></div>
+  </div>
+  <div class="card">
+    <div class="ng-row">
+      <div class="ng-x">✕</div>
+      <div><div class="ng-title">Redesigning the product discovery or add-to-cart experience</div><div class="ng-why">Focused strictly on checkout; separate team owns upstream flow.</div></div>
+    </div>
+    <div class="ng-row">
+      <div class="ng-x">✕</div>
+      <div><div class="ng-title">Building a new payment gateway or introducing new payment methods</div><div class="ng-why">This effort surfaces and optimizes existing payment rails only.</div></div>
+    </div>
+    <div class="ng-row">
+      <div class="ng-x">✕</div>
+      <div><div class="ng-title">Discounting or price-based interventions</div><div class="ng-why">Price-sensitivity is out of scope for this technical/UX initiative.</div></div>
+    </div>
+    <div class="ng-row" style="padding-bottom:0;border-bottom:none;">
+      <div class="ng-x">✕</div>
+      <div><div class="ng-title">Returns/refunds experience redesign</div><div class="ng-why">No impact on initial purchase conversion.</div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════ 09 SOLUTION ALIGNMENT ══════════════ -->
+<section id="solution">
+  <div class="sh">
+    <div class="sh-icon" style="background:var(--teal-lt);">🧩</div>
+    <div class="sh-meta"><div class="sh-num">09</div><h2>Solution Alignment</h2></div>
+  </div>
+  <div class="inout">
+    <div class="inout-in">
+      <div class="inout-hd">What's in</div>
+      <div class="inout-li">Full-funnel event instrumentation (from cart to confirmation)</div>
+      <div class="inout-li">Fee (shipping/tax) transparency on product details and cart pages</div>
+      <div class="inout-li">Upfront COD availability by pincode (cart page)</div>
+      <div class="inout-li">Payment failure detection and recovery (retry/alternate methods)</div>
+      <div class="inout-li">Optimization of payment page load (technical fixes, lazy loading)</div>
+    </div>
+    <div class="inout-out">
+      <div class="inout-hd">What's out</div>
+      <div class="inout-li">New payment methods (BNPL, EMI as separate methods)</div>
+      <div class="inout-li">Loyalty/rewards integration</div>
+      <div class="inout-li">Full app-wide redesign</div>
+    </div>
+  </div>
+  <h3>Open questions</h3>
+  <div class="card">
+    <div class="oq"><div class="oq-q">?</div><div style="font-size:14px;">Should COD be visible already on the product page, or only on the cart?</div></div>
+    <div class="oq"><div class="oq-q">?</div><div style="font-size:14px;">What is the ideal threshold of payment retries before alternate options surface? Immediate after 1 fail, or allow 2+ tries?</div></div>
+    <div class="oq" style="padding-bottom:0;border-bottom:none;"><div class="oq-q">?</div><div style="font-size:14px;">Should estimated fees adjust dynamically with cart changes (e.g., add/remove item adjustments on cart page)?</div></div>
+  </div>
+</section>
+
+
+<!-- ══════════════ 10 FEATURES ══════════════ -->
+<section id="features">
+  <div class="sh">
+    <div class="sh-icon" style="background:var(--indigo-lt);">⚙️</div>
+    <div class="sh-meta"><div class="sh-num">10</div><h2>Key Features: Plan of Record</h2></div>
+  </div>
+  <div class="feat-table">
+    <div class="feat-head">
+      <span>Feature</span><span>Priority</span><span>Description</span><span>Size</span>
+    </div>
+    <div class="feat-row">
+      <div class="feat-name">Granular funnel instrumentation</div>
+      <div><span class="badge badge-p0">P0</span></div>
+      <div class="feat-desc">Enables per-step tracking of abandonment, bottlenecks, and hypothesis testing</div>
+      <div><span class="size-pill">Small</span></div>
+    </div>
+    <div class="feat-row">
+      <div class="feat-name">Fee transparency</div>
+      <div><span class="badge badge-p0">P0</span></div>
+      <div class="feat-desc">Show shipping and estimated taxes on product and cart pages based on pincode</div>
+      <div><span class="size-pill">Medium</span></div>
+    </div>
+    <div class="feat-row">
+      <div class="feat-name">COD visibility at cart</div>
+      <div><span class="badge badge-p0">P0</span></div>
+      <div class="feat-desc">Show a "Cash on Delivery available for your pincode" badge with lookup on cart page</div>
+      <div><span class="size-pill">Medium</span></div>
+    </div>
+    <div class="feat-row">
+      <div class="feat-name">Payment failure recovery flow</div>
+      <div><span class="badge badge-p1">P1</span></div>
+      <div class="feat-desc">Real-time detection of UPI/card failure and CTA to alternate payment or COD</div>
+      <div><span class="size-pill">Medium</span></div>
+    </div>
+    <div class="feat-row">
+      <div class="feat-name">Checkout page load optimization</div>
+      <div><span class="badge badge-p1">P1</span></div>
+      <div class="feat-desc">Achieve first contentful paint &lt;2s; lazy load non-critical elements</div>
+      <div><span class="size-pill">Medium</span></div>
+    </div>
+    <div class="feat-row">
+      <div class="feat-name">Trust badges / security signals</div>
+      <div><span class="badge badge-p2">P2</span></div>
+      <div class="feat-desc">Visual indicators to reinforce trust at payment step</div>
+      <div><span class="size-pill">Small</span></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════ 11 FUTURE ══════════════ -->
+<section id="future">
+  <div class="sh">
+    <div class="sh-icon" style="background:var(--slate-lt);">🔮</div>
+    <div class="sh-meta"><div class="sh-num">11</div><h2>Future Considerations</h2></div>
+  </div>
+  <h3>Planned follow-ups</h3>
+  <div class="grid-4">
+    <div class="card"><div style="font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--txt-3);margin-bottom:4px;">Phase 3</div><div style="font-weight:500;font-size:14px;margin-bottom:2px;">Saved-cart recovery nudges</div><div style="font-size:12px;color:var(--txt-2);">Push/email for abandoned carts</div></div>
+    <div class="card"><div style="font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--txt-3);margin-bottom:4px;">Q4</div><div style="font-weight:500;font-size:14px;margin-bottom:2px;">One-click checkout</div><div style="font-size:12px;color:var(--txt-2);">For returning users</div></div>
+    <div class="card"><div style="font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--txt-3);margin-bottom:4px;">Q4</div><div style="font-weight:500;font-size:14px;margin-bottom:2px;">EMI visibility earlier</div><div style="font-size:12px;color:var(--txt-2);">Surface in funnel earlier</div></div>
+    <div class="card"><div style="font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--txt-3);margin-bottom:4px;">Q4</div><div style="font-weight:500;font-size:14px;margin-bottom:2px;">Multi-language checkout</div><div style="font-size:12px;color:var(--txt-2);">Regional language support</div></div>
+  </div>
+  <h3>Build-now implications</h3>
+  <div class="callout callout-indigo">
+    <div class="cl-label">Architecture guidance</div>
+    <ul style="padding-left:18px;font-size:13px;display:flex;flex-direction:column;gap:6px;">
+      <li>Ensure all fee and payment calculations are dynamic, to allow stacking of EMI, offers, or alternate payment modes in the future.</li>
+      <li>Do not hard-code any copy; eventual language support needed.</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ══════════════ 12 KEY FLOWS ══════════════ -->
+<section id="flows">
+  <div class="sh">
+    <div class="sh-icon" style="background:var(--indigo-lt);">🔄</div>
+    <div class="sh-meta"><div class="sh-num">12</div><h2>Key Flows</h2></div>
+  </div>
+
+  <!-- Tabs for the 3 flows -->
+  <div class="tabs" id="flowTabs">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="showTab('flow1',this)">Fee transparency</button>
+      <button class="tab-btn" onclick="showTab('flow2',this)">COD discovery</button>
+      <button class="tab-btn" onclick="showTab('flow3',this)">Payment failure recovery</button>
+    </div>
+
+    <!-- FLOW 1 -->
+    <div class="tab-panel active" id="flow1">
+      <div class="diagram-wrap">
+        <div class="diagram-label">Fee transparency flow</div>
+        <svg width="100%" viewBox="0 0 680 200">
+          <defs>
+            <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+          <!-- Step 1: PDP -->
+          <g>
+            <rect x="20" y="60" width="160" height="80" rx="8" fill="#EEEDF9" stroke="#8483D1" stroke-width="0.5"/>
+            <text font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#3D3BB5" x="100" y="90" text-anchor="middle" dominant-baseline="central">Product detail page</text>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#6B6860" x="100" y="108" text-anchor="middle" dominant-baseline="central">Price + shipping estimate</text>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#6B6860" x="100" y="124" text-anchor="middle" dominant-baseline="central">shown upfront</text>
+          </g>
+          <!-- Arrow 1→2 -->
+          <line x1="180" y1="100" x2="210" y2="100" stroke="#CEC9BF" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <!-- Step 2: Cart -->
+          <g>
+            <rect x="210" y="60" width="160" height="80" rx="8" fill="#EEEDF9" stroke="#8483D1" stroke-width="0.5"/>
+            <text font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#3D3BB5" x="290" y="90" text-anchor="middle" dominant-baseline="central">Cart page</text>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#6B6860" x="290" y="108" text-anchor="middle" dominant-baseline="central">Itemized total: subtotal,</text>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#6B6860" x="290" y="124" text-anchor="middle" dominant-baseline="central">shipping, tax</text>
+          </g>
+          <!-- Arrow 2→3 -->
+          <line x1="370" y1="100" x2="400" y2="100" stroke="#CEC9BF" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <!-- Step 3: Payment — no new fees -->
+          <g>
+            <rect x="400" y="60" width="160" height="80" rx="8" fill="#E2F4F0" stroke="#3CBEA8" stroke-width="1"/>
+            <text font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#0B7B6A" x="480" y="90" text-anchor="middle" dominant-baseline="central">Payment screen</text>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#0B7B6A" x="480" y="108" text-anchor="middle" dominant-baseline="central">Identical total to cart.</text>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#0B7B6A" x="480" y="124" text-anchor="middle" dominant-baseline="central">No new line items.</text>
+          </g>
+          <!-- No-surprise label -->
+          <text font-family="DM Sans,sans-serif" font-size="10" font-weight="500" fill="#0B7B6A" x="480" y="162" text-anchor="middle">No surprise fees</text>
+          <path d="M430 150 Q480 145 530 150" stroke="#3CBEA8" stroke-width="1" fill="none" stroke-dasharray="3 2"/>
+        </svg>
+      </div>
+
+      <div style="margin-top:4px;">
+        <div class="fstep">
+          <div class="fstep-hd"><div class="fstep-n">1</div><div class="fstep-screen">Screen: Product Detail Page (PDP)</div></div>
+          <div class="frow"><span class="flabel">User sees</span><span>Product price + inline shipping estimate ("Delivery: ₹49 to 560001") and estimated tax ("+₹28 GST") below the price. If no pincode is detected, a prompt appears: "Enter pincode to see delivery charges."</span></div>
+          <div class="frow"><span class="flabel">User does</span><span>Enters pincode if missing, then clicks "Add to Cart."</span></div>
+          <div class="frow"><span class="flabel">Result</span><span>Fee estimate is stored in session. Product added to cart.</span></div>
+        </div>
+        <div class="farrow">↓</div>
+        <div class="fstep">
+          <div class="fstep-hd"><div class="fstep-n">2</div><div class="fstep-screen">Screen: Cart Page</div></div>
+          <div class="frow"><span class="flabel">User sees</span><span>Itemized breakdown — product subtotal, per-item shipping, tax, and order total. A "How is this calculated?" tooltip is available.</span></div>
+          <div class="frow"><span class="flabel">User does</span><span>Reviews total, proceeds to checkout.</span></div>
+          <div class="frow"><span class="flabel">Result</span><span>No new fee information introduced at payment — total matches exactly.</span></div>
+        </div>
+        <div class="farrow">↓</div>
+        <div class="fstep">
+          <div class="fstep-hd"><div class="fstep-n">3</div><div class="fstep-screen">Screen: Checkout / Payment</div></div>
+          <div class="frow"><span class="flabel">User sees</span><span>Identical total as cart page. No new line items.</span></div>
+          <div class="frow"><span class="flabel">User does</span><span>Selects payment method and completes purchase.</span></div>
+        </div>
+      </div>
+
+      <h3>Edge cases — fee transparency flow</h3>
+      <div class="card">
+        <div class="ec"><div class="ec-dot"></div><div><em>User adds or removes items after fee estimate is shown:</em> Fee recalculates in real-time on the cart page. A subtle "Delivery charges updated" toast appears.</div></div>
+        <div class="ec"><div class="ec-dot"></div><div><em>User changes delivery pincode after estimate is shown:</em> Full fee re-fetch triggers. If new pincode has higher shipping, a banner reads "Delivery charges updated for new address." If lower or free, a positive confirmation appears.</div></div>
+        <div class="ec"><div class="ec-dot"></div><div><em>Pincode API is down:</em> Inline estimate is replaced with "Shipping cost will be confirmed at checkout" in muted text. No hard error shown. Checkout is not blocked.</div></div>
+        <div class="ec"><div class="ec-dot"></div><div><em>Item in cart is not eligible for delivery to pincode:</em> A clear inline warning on the cart page reads "This item cannot be delivered to [pincode]. Remove it or change your delivery address to proceed."</div></div>
+      </div>
+    </div>
+
+    <!-- FLOW 2 -->
+    <div class="tab-panel" id="flow2">
+      <div class="diagram-wrap">
+        <div class="diagram-label">COD discovery flow</div>
+        <svg width="100%" viewBox="0 0 680 200">
+          <defs>
+            <marker id="arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+          <!-- Cart page with COD badge -->
+          <g>
+            <rect x="20" y="40" width="175" height="120" rx="8" fill="#EEEDF9" stroke="#8483D1" stroke-width="0.5"/>
+            <text font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#3D3BB5" x="108" y="68" text-anchor="middle" dominant-baseline="central">Cart page</text>
+            <rect x="34" y="82" width="147" height="28" rx="5" fill="#E2F4F0" stroke="#3CBEA8" stroke-width="0.5"/>
+            <text font-family="DM Sans,sans-serif" font-size="10" font-weight="500" fill="#0B7B6A" x="108" y="96" text-anchor="middle" dominant-baseline="central">✓ COD available for 273001</text>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#6B6860" x="108" y="126" text-anchor="middle" dominant-baseline="central">User confident about COD</text>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#6B6860" x="108" y="144" text-anchor="middle" dominant-baseline="central">before proceeding</text>
+          </g>
+          <line x1="195" y1="100" x2="228" y2="100" stroke="#CEC9BF" stroke-width="1.5" marker-end="url(#arr3)"/>
+          <!-- Payment method selection -->
+          <g>
+            <rect x="228" y="20" width="210" height="160" rx="8" fill="#EEEDF9" stroke="#8483D1" stroke-width="0.5"/>
+            <text font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#3D3BB5" x="333" y="44" text-anchor="middle" dominant-baseline="central">Payment method selection</text>
+            <!-- COD first option highlighted -->
+            <rect x="242" y="58" width="182" height="26" rx="5" fill="#E2F4F0" stroke="#3CBEA8" stroke-width="1"/>
+            <text font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#0B7B6A" x="333" y="71" text-anchor="middle" dominant-baseline="central">● Cash on Delivery  ← first</text>
+            <!-- Other options -->
+            <rect x="242" y="92" width="182" height="24" rx="5" fill="#F5F4F0" stroke="#E4E2DC" stroke-width="0.5"/>
+            <text font-family="DM Sans,sans-serif" font-size="11" fill="#6B6860" x="333" y="104" text-anchor="middle" dominant-baseline="central">○ UPI</text>
+            <rect x="242" y="122" width="182" height="24" rx="5" fill="#F5F4F0" stroke="#E4E2DC" stroke-width="0.5"/>
+            <text font-family="DM Sans,sans-serif" font-size="11" fill="#6B6860" x="333" y="134" text-anchor="middle" dominant-baseline="central">○ Debit / Credit Card</text>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#6B6860" x="333" y="162" text-anchor="middle" dominant-baseline="central">Pay ₹[total] at delivery. No advance.</text>
+          </g>
+          <line x1="438" y1="100" x2="468" y2="100" stroke="#CEC9BF" stroke-width="1.5" marker-end="url(#arr3)"/>
+          <!-- Order confirmation -->
+          <g>
+            <rect x="468" y="60" width="165" height="80" rx="8" fill="#E2F4F0" stroke="#3CBEA8" stroke-width="1"/>
+            <text font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#0B7B6A" x="550" y="88" text-anchor="middle" dominant-baseline="central">Order confirmed</text>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#0B7B6A" x="550" y="108" text-anchor="middle" dominant-baseline="central">COD reminder shown</text>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#0B7B6A" x="550" y="124" text-anchor="middle" dominant-baseline="central">with delivery timeline</text>
+          </g>
+        </svg>
+      </div>
+
+      <div style="margin-top:4px;">
+        <div class="fstep">
+          <div class="fstep-hd"><div class="fstep-n">1</div><div class="fstep-screen">Screen: Cart Page</div></div>
+          <div class="frow"><span class="flabel">User sees</span><span>A green badge below the delivery address field: "✓ Cash on Delivery available for [pincode]." If COD is not available, the badge is absent — no negative messaging shown.</span></div>
+          <div class="frow"><span class="flabel">User does</span><span>Confirms delivery address and proceeds to checkout.</span></div>
+          <div class="frow"><span class="flabel">Result</span><span>User arrives at payment already knowing COD is an option.</span></div>
+        </div>
+        <div class="farrow">↓</div>
+        <div class="fstep">
+          <div class="fstep-hd"><div class="fstep-n">2</div><div class="fstep-screen">Screen: Payment Method Selection</div></div>
+          <div class="frow"><span class="flabel">User sees</span><span>COD listed as the first payment option (above UPI and card) for COD-eligible users, with a note: "Pay ₹[total] in cash at delivery. No advance needed."</span></div>
+          <div class="frow"><span class="flabel">User does</span><span>Selects COD and confirms order.</span></div>
+          <div class="frow"><span class="flabel">Result</span><span>Order placed. Confirmation screen shown with delivery timeline and COD reminder.</span></div>
+        </div>
+      </div>
+
+      <h3>Edge cases — COD discovery flow</h3>
+      <div class="card">
+        <div class="ec"><div class="ec-dot"></div><div><em>User is not COD-eligible for their pincode:</em> COD badge is simply not shown on the cart. COD does not appear as a payment option. No explicit "COD not available" message — avoids friction and confusion.</div></div>
+        <div class="ec"><div class="ec-dot"></div><div><em>User changes pincode to a COD-ineligible area after seeing the badge:</em> Badge disappears with a subtle update. If user had selected COD on the payment screen and then changes address, COD option is removed and user is prompted to select an alternate method with a contextual message: "COD is not available for your new address. Please choose another payment method."</div></div>
+        <div class="ec"><div class="ec-dot"></div><div><em>Pincode API timeout during COD check:</em> COD badge is not shown (fail-safe — never falsely promise COD). A retry is triggered silently in the background. If resolved before the user reaches payment, COD appears there.</div></div>
+        <div class="ec"><div class="ec-dot"></div><div><em>Cart contains a mix of COD-eligible and COD-ineligible items:</em> COD is not offered. A tooltip on the payment screen explains: "One or more items in your cart are not eligible for COD."</div></div>
+      </div>
+    </div>
+
+    <!-- FLOW 3 -->
+    <div class="tab-panel" id="flow3">
+      <div class="diagram-wrap">
+        <div class="diagram-label">Payment failure recovery flow</div>
+        <svg width="100%" viewBox="0 0 680 260">
+          <defs>
+            <marker id="arr4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+          <!-- Payment screen -->
+          <g>
+            <rect x="20" y="40" width="150" height="100" rx="8" fill="#EEEDF9" stroke="#8483D1" stroke-width="0.5"/>
+            <text font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#3D3BB5" x="95" y="65" text-anchor="middle" dominant-baseline="central">Payment screen</text>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#6B6860" x="95" y="85" text-anchor="middle" dominant-baseline="central">UPI (default)</text>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#6B6860" x="95" y="100" text-anchor="middle" dominant-baseline="central">Card</text>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#6B6860" x="95" y="115" text-anchor="middle" dominant-baseline="central">COD (if eligible)</text>
+            <text font-family="DM Sans,sans-serif" font-size="9" fill="#6B6860" x="95" y="132" text-anchor="middle" dominant-baseline="central">🔒 100% secure checkout</text>
+          </g>
+          <!-- Arrow: attempt -->
+          <line x1="170" y1="90" x2="200" y2="90" stroke="#CEC9BF" stroke-width="1.5" marker-end="url(#arr4)"/>
+          <text font-family="DM Sans,sans-serif" font-size="9" fill="#9E9B95" x="185" y="82" text-anchor="middle">UPI attempt</text>
+          <!-- Processing -->
+          <g>
+            <rect x="200" y="65" width="130" height="50" rx="8" fill="#FDF3E2" stroke="#F0A830" stroke-width="0.5"/>
+            <text font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#9A5B0A" x="265" y="88" text-anchor="middle" dominant-baseline="central">Processing…</text>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#9A5B0A" x="265" y="104" text-anchor="middle" dominant-baseline="central">Do not press back</text>
+          </g>
+          <!-- Arrow: failure -->
+          <line x1="330" y1="90" x2="362" y2="90" stroke="#E27070" stroke-width="1.5" marker-end="url(#arr4)"/>
+          <text font-family="DM Sans,sans-serif" font-size="9" fill="#B03030" x="346" y="82" text-anchor="middle">Failed</text>
+          <!-- Failure recovery screen -->
+          <g>
+            <rect x="362" y="30" width="200" height="180" rx="8" fill="#FCEEEE" stroke="#E27070" stroke-width="1"/>
+            <text font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#B03030" x="462" y="58" text-anchor="middle" dominant-baseline="central">Payment failure screen</text>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#6B6860" x="462" y="76" text-anchor="middle" dominant-baseline="central">"Payment didn't go through.</text>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#6B6860" x="462" y="91" text-anchor="middle" dominant-baseline="central">Your money is safe."</text>
+            <!-- CTAs -->
+            <rect x="378" y="104" width="168" height="24" rx="5" fill="#EEEDF9" stroke="#8483D1" stroke-width="0.5"/>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#3D3BB5" x="462" y="116" text-anchor="middle" dominant-baseline="central">Try UPI again</text>
+            <rect x="378" y="134" width="168" height="24" rx="5" fill="#EEEDF9" stroke="#8483D1" stroke-width="0.5"/>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#3D3BB5" x="462" y="146" text-anchor="middle" dominant-baseline="central">Pay by Card</text>
+            <rect x="378" y="164" width="168" height="24" rx="5" fill="#E2F4F0" stroke="#3CBEA8" stroke-width="0.5"/>
+            <text font-family="DM Sans,sans-serif" font-size="10" fill="#0B7B6A" x="462" y="176" text-anchor="middle" dominant-baseline="central">Pay Cash on Delivery (if eligible)</text>
+            <text font-family="DM Sans,sans-serif" font-size="9" fill="#9E9B95" x="462" y="202" text-anchor="middle" dominant-baseline="central">Need help? Contact support</text>
+          </g>
+        </svg>
+      </div>
+
+      <div style="margin-top:4px;">
+        <div class="fstep">
+          <div class="fstep-hd"><div class="fstep-n">1</div><div class="fstep-screen">Screen: Payment Screen</div></div>
+          <div class="frow"><span class="flabel">User sees</span><span>Payment methods listed: UPI (default, pre-selected), Debit/Credit Card, Net Banking, COD (if eligible). A security badge and "100% secure checkout" label are visible.</span></div>
+          <div class="frow"><span class="flabel">User does</span><span>Enters UPI ID or scans QR and confirms payment.</span></div>
+          <div class="frow"><span class="flabel">Result</span><span>Payment request sent to UPI gateway.</span></div>
+        </div>
+        <div class="farrow">↓</div>
+        <div class="fstep">
+          <div class="fstep-hd"><div class="fstep-n">2</div><div class="fstep-screen">Screen: Payment Processing</div></div>
+          <div class="frow"><span class="flabel">User sees</span><span>Loading spinner with message "Processing your payment… do not press back."</span></div>
+          <div class="frow"><span class="flabel">Result</span><span>Gateway responds with success or failure within 30 seconds.</span></div>
+        </div>
+        <div class="farrow">↓</div>
+        <div class="fstep" style="border-left:3px solid var(--red);">
+          <div class="fstep-hd"><div class="fstep-n" style="background:var(--red);">3</div><div class="fstep-screen">Screen: Payment Failure</div></div>
+          <div class="frow"><span class="flabel">User sees</span><span>A non-alarming failure message: "Payment didn't go through. This happens sometimes — your money is safe." Immediately below: three clearly labeled CTAs — "Try UPI again," "Pay by Card," and (if COD-eligible) "Pay Cash on Delivery." A fourth option: "Need help? Contact support."</span></div>
+          <div class="frow"><span class="flabel">User does</span><span>Selects alternate method.</span></div>
+          <div class="frow"><span class="flabel">Result</span><span>User is taken directly to the relevant payment form — no return to the full payment selection screen.</span></div>
+        </div>
+      </div>
+
+      <h3>Edge cases — payment failure recovery flow</h3>
+      <div class="card">
+        <div class="ec"><div class="ec-dot"></div><div><em>UPI timeout (no response within 30 seconds):</em> System treats it as a failure. User is shown the same recovery screen. Backend simultaneously checks if any debit was made — if yes, auto-initiates refund and informs user: "We noticed a deduction. A refund will be processed in 3–5 business days."</div></div>
+        <div class="ec"><div class="ec-dot"></div><div><em>User attempts card payment after UPI failure, and card also fails:</em> After second consecutive failure, the recovery screen changes tone: "Having trouble? Try COD or contact support." Reduces cognitive load — don't ask user to try a third method without guidance.</div></div>
+        <div class="ec"><div class="ec-dot"></div><div><em>User closes the app during payment processing:</em> On re-opening, if payment status is unknown, the app shows an order status banner: "We're confirming your payment. Check back in a few minutes." Links to order tracking page. Does not create a duplicate order.</div></div>
+        <div class="ec"><div class="ec-dot"></div><div><em>COD is not available and both UPI and card fail:</em> Recovery screen shows only "Try UPI again," "Pay by Card (different card)," and "Contact Support." No dead end — support CTA is always visible.</div></div>
+        <div class="ec"><div class="ec-dot"></div><div><em>User's UPI app is not installed:</em> UPI option is grayed out with tooltip "UPI app not detected on this device." Only card and COD (if eligible) are active.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════ 13 KEY LOGIC ══════════════ -->
+<section id="logic">
+  <div class="sh">
+    <div class="sh-icon" style="background:var(--amber-lt);">⚖️</div>
+    <div class="sh-meta"><div class="sh-num">13</div><h2>Key Logic</h2></div>
+  </div>
+  <h3>Rules</h3>
+  <p>Click each rule to expand the detail.</p>
+
+  <div class="acc">
+    <button class="acc-hd open" onclick="toggleAcc(this)">
+      <span>📦 Fee estimation rule</span>
+      <span class="acc-arrow">▾</span>
+    </button>
+    <div class="acc-body open">
+      <p style="margin:0 0 8px;">Shipping/tax fees must be calculated for user pincode + item weight, shown at PDP/cart — not deferred to checkout.</p>
+      <div class="rule-when"><strong>Applies when:</strong> PDP loads with a pincode present (geo/IP or user-entered).</div>
+      <div class="rule-eg"><strong>Example:</strong> Bengaluru 560001 sees ₹49 shipping; Delhi 110011 sees ₹0.</div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-hd" onclick="toggleAcc(this)">
+      <span>✅ COD eligibility rule</span>
+      <span class="acc-arrow">▾</span>
+    </button>
+    <div class="acc-body">
+      <p style="margin:0 0 8px;">COD availability must be checked by pincode when user lands on cart, not just at payment.</p>
+      <div class="rule-when"><strong>Applies when:</strong> Cart loads full.</div>
+      <div class="rule-eg"><strong>Example:</strong> If pincode 560001 is COD-eligible, badge is green; if not, badge is red or omitted.</div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-hd" onclick="toggleAcc(this)">
+      <span>🔄 Payment retry rule</span>
+      <span class="acc-arrow">▾</span>
+    </button>
+    <div class="acc-body">
+      <p style="margin:0 0 8px;">After first UPI/card failure, show alternate options immediately (don't force same-method retry).</p>
+      <div class="rule-when"><strong>Applies when:</strong> Payment error received.</div>
+      <div class="rule-eg"><strong>Example:</strong> UPI failure — immediately show UPI retry + alternate methods + COD if available.</div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-hd" onclick="toggleAcc(this)">
+      <span>⚡ Page load rule</span>
+      <span class="acc-arrow">▾</span>
+    </button>
+    <div class="acc-body">
+      <p style="margin:0 0 8px;">Must achieve first contentful paint &lt;2s on 4G for payment step.</p>
+      <div class="rule-when"><strong>Applies when:</strong> Navigating from cart to payment.</div>
+      <div class="rule-eg"><strong>Example:</strong> On Moto G51 4G, Chrome, with JS bundles lazy loaded.</div>
+    </div>
+  </div>
+
+  <h3>Edge cases</h3>
+  <div class="card">
+    <div class="ec"><div class="ec-dot"></div><div><strong>What happens if pincode cannot be resolved (API downtime)?</strong><br><span style="color:var(--txt-2);">Show "Fee estimate unavailable. Will be confirmed at checkout" — with retry link.</span></div></div>
+    <div class="ec"><div class="ec-dot"></div><div><strong>What if user changes pincode/cart after estimate?</strong><br><span style="color:var(--txt-2);">Dynamically update fee/COD badge accordingly.</span></div></div>
+    <div class="ec"><div class="ec-dot"></div><div><strong>Concurrent user action:</strong><br><span style="color:var(--txt-2);">Cart update during slow fee fetch must queue/fetch new estimate, never stale data.</span></div></div>
+  </div>
+</section>
+
+
+<!-- ══════════════ 14 LAUNCH PLAN ══════════════ -->
+<section id="launch">
+  <div class="sh">
+    <div class="sh-icon" style="background:var(--teal-lt);">🚀</div>
+    <div class="sh-meta"><div class="sh-num">14</div><h2>Launch Plan</h2></div>
+  </div>
+
+  <h3>Phases</h3>
+
+  <!-- Timeline diagram -->
+  <div class="diagram-wrap">
+    <div class="diagram-label">16-week delivery timeline</div>
+    <svg width="100%" viewBox="0 0 680 120">
+      <!-- Phase 1 bar -->
+      <rect x="40" y="30" width="160" height="36" rx="6" fill="#FDF3E2" stroke="#F0A830" stroke-width="1"/>
+      <text font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#9A5B0A" x="120" y="46" text-anchor="middle" dominant-baseline="central">Phase 1 — Diagnostic</text>
+      <text font-family="DM Sans,sans-serif" font-size="10" fill="#9A5B0A" x="120" y="60" text-anchor="middle" dominant-baseline="central">Weeks 1–4</text>
+
+      <!-- Phase 2 bar -->
+      <rect x="210" y="30" width="240" height="36" rx="6" fill="#EEEDF9" stroke="#8483D1" stroke-width="1"/>
+      <text font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#3D3BB5" x="330" y="46" text-anchor="middle" dominant-baseline="central">Phase 2 — Experiment</text>
+      <text font-family="DM Sans,sans-serif" font-size="10" fill="#3D3BB5" x="330" y="60" text-anchor="middle" dominant-baseline="central">Weeks 5–10</text>
+
+      <!-- Phase 3 bar -->
+      <rect x="460" y="30" width="180" height="36" rx="6" fill="#E2F4F0" stroke="#3CBEA8" stroke-width="1"/>
+      <text font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#0B7B6A" x="550" y="46" text-anchor="middle" dominant-baseline="central">Phase 3 — Rollout</text>
+      <text font-family="DM Sans,sans-serif" font-size="10" fill="#0B7B6A" x="550" y="60" text-anchor="middle" dominant-baseline="central">Weeks 11–16</text>
+
+      <!-- Week markers -->
+      <line x1="40" y1="80" x2="640" y2="80" stroke="#E4E2DC" stroke-width="0.5"/>
+      <text font-family="DM Sans,sans-serif" font-size="9" fill="#9E9B95" x="40" y="94" text-anchor="middle">W1</text>
+      <text font-family="DM Sans,sans-serif" font-size="9" fill="#9E9B95" x="200" y="94" text-anchor="middle">W4</text>
+      <text font-family="DM Sans,sans-serif" font-size="9" fill="#9E9B95" x="210" y="94" text-anchor="middle">W5</text>
+      <text font-family="DM Sans,sans-serif" font-size="9" fill="#9E9B95" x="448" y="94" text-anchor="middle">W10</text>
+      <text font-family="DM Sans,sans-serif" font-size="9" fill="#9E9B95" x="460" y="94" text-anchor="middle">W11</text>
+      <text font-family="DM Sans,sans-serif" font-size="9" fill="#9E9B95" x="640" y="94" text-anchor="middle">W16</text>
+      <!-- tick marks -->
+      <line x1="40"  y1="78" x2="40"  y2="83" stroke="#9E9B95" stroke-width="0.5"/>
+      <line x1="200" y1="78" x2="200" y2="83" stroke="#9E9B95" stroke-width="0.5"/>
+      <line x1="448" y1="78" x2="448" y2="83" stroke="#9E9B95" stroke-width="0.5"/>
+      <line x1="640" y1="78" x2="640" y2="83" stroke="#9E9B95" stroke-width="0.5"/>
+    </svg>
+  </div>
+
+  <div class="phase" style="border-left:4px solid var(--amber);">
+    <div class="phase-ph" style="color:var(--amber);">Phase 1 · 4 weeks</div>
+    <div class="phase-title">Diagnostic + Quick Wins</div>
+    <p style="font-size:13px;margin:0;"><strong>Purpose:</strong> Establish ground truth on drop-off/fixes; address low-hanging fruit</p>
+    <div class="phase-meta">
+      <div class="pm-item"><span>Entry criteria</span><span>Engineering readiness; analytics endpoints ready</span></div>
+      <div class="pm-item"><span>Exit criteria</span><span>Full funnel instrumented; fee/COD fixes live; baseline metrics</span></div>
+      <div class="pm-item"><span>Duration</span><span>4 weeks</span></div>
+    </div>
+  </div>
+
+  <div class="phase" style="border-left:4px solid var(--indigo);">
+    <div class="phase-ph" style="color:var(--indigo);">Phase 2 · 6 weeks</div>
+    <div class="phase-title">Checkout Redesign & Experiment</div>
+    <p style="font-size:13px;margin:0;"><strong>Purpose:</strong> Test and scale solution with controlled experiment</p>
+    <div class="phase-meta">
+      <div class="pm-item"><span>Entry criteria</span><span>Phase 1 instrumented, key fixes deployed</span></div>
+      <div class="pm-item"><span>Exit criteria</span><span>Statistically significant (95%+) CCR improvement</span></div>
+      <div class="pm-item"><span>Duration</span><span>6 weeks</span></div>
+    </div>
+  </div>
+
+  <div class="phase" style="border-left:4px solid var(--teal);">
+    <div class="phase-ph" style="color:var(--teal);">Phase 3 · 6 weeks</div>
+    <div class="phase-title">Full Rollout</div>
+    <p style="font-size:13px;margin:0;"><strong>Purpose:</strong> GA of effective flows</p>
+    <div class="phase-meta">
+      <div class="pm-item"><span>Entry criteria</span><span>A/B surpasses 95% significance, metrics stable</span></div>
+      <div class="pm-item"><span>Exit criteria</span><span>All users on updated flow</span></div>
+      <div class="pm-item"><span>Duration</span><span>6 weeks</span></div>
+    </div>
+  </div>
+
+  <h3>Experiment design</h3>
+  <div class="card">
+    <div class="frow" style="padding:8px 0;border-bottom:1px solid var(--border);"><span class="flabel">Type</span><span style="font-size:14px;">A/B test (Phase 2, payment failure recovery flow)</span></div>
+    <div class="frow" style="padding:8px 0;border-bottom:1px solid var(--border);"><span class="flabel">Sample size</span><span style="font-size:14px;">~500,000 users per arm for statistical significance (est. based on baseline CCR uplift of 15%)</span></div>
+    <div class="frow" style="padding:8px 0;"><span class="flabel">Success criteria</span><span style="font-size:14px;">CCR improves by at least 10%, statistically significant at 95% confidence, no drop in guardrails</span></div>
+  </div>
+
+  <div class="callout callout-amber" style="margin-top:10px;">
+    <div class="cl-label">Gray zone decision rule</div>
+    <p style="font-size:13px;margin:0;">If CCR improvement is directionally positive but below the 10% threshold (e.g., 5–9% lift at 95% confidence), the decision is not an automatic rollback. The PM and Data Lead jointly evaluate: (a) whether the improvement is statistically significant at 90% confidence, (b) whether secondary metrics (payment drop-off, support tickets) corroborate the direction, and (c) whether the cost of delay outweighs shipping a smaller-than-expected gain. A documented decision memo is required before proceeding or pausing.</p>
+  </div>
+
+  <h3>Dependencies & contingencies</h3>
+  <div class="card">
+    <div class="ec" style="padding-bottom:14px;">
+      <div class="ec-dot" style="background:var(--indigo);"></div>
+      <div>
+        <strong>Payments API:</strong> Rely on Payments Team for real-time failure detection + alternate payment APIs<br>
+        <span style="color:var(--txt-2);font-size:12px;"><strong>Contingency:</strong> Fallback to simple failure screen with messaging if APIs delayed</span>
+      </div>
+    </div>
+    <div class="ec" style="border-bottom:none;">
+      <div class="ec-dot" style="background:var(--indigo);"></div>
+      <div>
+        <strong>Logistics API:</strong> Real-time pincode lookup for fee estimates/COD<br>
+        <span style="color:var(--txt-2);font-size:12px;"><strong>Contingency:</strong> Cache fallback or user-retry flows</span>
+        <div class="callout callout-red" style="margin-top:8px;">
+          <div class="cl-label">Escalation trigger</div>
+          Logistics must confirm API readiness and provide a sandbox environment by end of Week 1. If this commitment is not met by Day 5 of Week 1, the PM escalates immediately to the Engineering Director and activates the contingency plan: display a static estimated fee range based on category-level averages (not pincode-level), with a disclaimer 'Exact shipping cost confirmed at checkout.' This fallback ships on the same Week 3 timeline regardless of Logistics API status.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════ 15 STAKEHOLDERS ══════════════ -->
+<section id="stakeholders">
+  <div class="sh">
+    <div class="sh-icon" style="background:var(--slate-lt);">👥</div>
+    <div class="sh-meta"><div class="sh-num">15</div><h2>Stakeholder Alignment & RACI</h2></div>
+  </div>
+  <p>With Payments, Frontend, Logistics, and Trust & Safety all contributing to checkout, clear ownership is critical to avoid delays and conflicting implementations. Establishing a RACI ensures decisions, responsibilities, and handoffs are unambiguous across teams.</p>
+
+  <div class="raci-wrap" style="margin-top:14px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Activity</th><th>PM</th><th>Frontend</th><th>Payments</th><th>Logistics</th><th>Trust & Safety</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Funnel instrumentation</td><td><span class="a">A</span></td><td><span class="r">R</span></td><td><span class="c">C</span></td><td>—</td><td><span class="i">I</span></td></tr>
+        <tr><td>Fee transparency (FE)</td><td><span class="a">A</span></td><td><span class="r">R</span></td><td>—</td><td><span class="c">C</span></td><td>—</td></tr>
+        <tr><td>COD badge by pincode</td><td><span class="a">A</span></td><td><span class="r">R</span></td><td>—</td><td><span class="r">R</span></td><td>—</td></tr>
+        <tr><td>Payment failure recovery</td><td><span class="a">A</span></td><td><span class="r">R</span></td><td><span class="r">R</span></td><td>—</td><td><span class="c">C</span></td></tr>
+        <tr><td>Page load optimization</td><td><span class="a">A</span></td><td><span class="r">R</span></td><td><span class="c">C</span></td><td>—</td><td>—</td></tr>
+        <tr><td>Guardrail monitoring</td><td><span class="r">R</span></td><td><span class="i">I</span></td><td><span class="i">I</span></td><td><span class="i">I</span></td><td><span class="c">C</span></td></tr>
+      </tbody>
+    </table>
+    <div style="padding:12px 14px;font-size:11px;color:var(--txt-3);display:flex;gap:20px;border-top:1px solid var(--border);">
+      <span><span class="r">R</span> = Responsible</span>
+      <span><span class="a">A</span> = Accountable</span>
+      <span><span class="c">C</span> = Consulted</span>
+      <span><span class="i">I</span> = Informed</span>
+    </div>
+  </div>
+
+  <h3>Escalation path</h3>
+  <div class="card">
+    <div class="ec"><div class="ec-dot" style="background:var(--amber);"></div><div>Inter-team blockers (e.g., API delays from Logistics or Payments) escalate to the PM within 24 hours, then to the Engineering Director if unresolved in 48 hours.</div></div>
+    <div class="ec"><div class="ec-dot" style="background:var(--amber);"></div><div>Scope disputes between teams are arbitrated by the PM. If unresolved in 3 business days, escalate to the CPO.</div></div>
+    <div class="ec" style="border-bottom:none;"><div class="ec-dot" style="background:var(--red);"></div><div>Guardrail metric breaches (AOV drop, fraud spike) trigger an immediate rollback decision owned jointly by PM and the Data Lead.</div></div>
+  </div>
+
+  <h3>Key milestones & dependencies</h3>
+  <div class="diagram-wrap">
+    <div class="diagram-label">Critical path dependencies</div>
+    <svg width="100%" viewBox="0 0 680 180">
+      <defs>
+        <marker id="arr5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <!-- Node: Funnel instrumented -->
+      <g>
+        <rect x="20" y="30" width="155" height="48" rx="6" fill="#FDF3E2" stroke="#F0A830" stroke-width="0.5"/>
+        <text font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#9A5B0A" x="98" y="50" text-anchor="middle" dominant-baseline="central">Funnel instrumented</text>
+        <text font-family="DM Sans,sans-serif" font-size="10" fill="#9A5B0A" x="98" y="66" text-anchor="middle" dominant-baseline="central">Week 2</text>
+      </g>
+      <!-- Node: Logistics API ready -->
+      <g>
+        <rect x="20" y="102" width="155" height="48" rx="6" fill="#FDF3E2" stroke="#F0A830" stroke-width="0.5"/>
+        <text font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#9A5B0A" x="98" y="122" text-anchor="middle" dominant-baseline="central">Logistics API ready</text>
+        <text font-family="DM Sans,sans-serif" font-size="10" fill="#9A5B0A" x="98" y="138" text-anchor="middle" dominant-baseline="central">End of Week 1</text>
+      </g>
+      <!-- Arrow: instrumented → data readout -->
+      <line x1="175" y1="54" x2="210" y2="80" stroke="#CEC9BF" stroke-width="1.2" marker-end="url(#arr5)"/>
+      <!-- Node: Data readout -->
+      <g>
+        <rect x="210" y="60" width="150" height="48" rx="6" fill="#EEEDF9" stroke="#8483D1" stroke-width="0.5"/>
+        <text font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#3D3BB5" x="285" y="80" text-anchor="middle" dominant-baseline="central">Data readout</text>
+        <text font-family="DM Sans,sans-serif" font-size="10" fill="#3D3BB5" x="285" y="96" text-anchor="middle" dominant-baseline="central">Week 5</text>
+      </g>
+      <!-- Arrow: logistics API → fee/COD live -->
+      <line x1="175" y1="126" x2="210" y2="106" stroke="#CEC9BF" stroke-width="1.2" marker-end="url(#arr5)"/>
+      <!-- Arrow: data readout → A/B test -->
+      <line x1="360" y1="84" x2="396" y2="84" stroke="#CEC9BF" stroke-width="1.2" marker-end="url(#arr5)"/>
+      <!-- Node: A/B test launched -->
+      <g>
+        <rect x="396" y="60" width="150" height="48" rx="6" fill="#EEEDF9" stroke="#8483D1" stroke-width="0.5"/>
+        <text font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#3D3BB5" x="471" y="80" text-anchor="middle" dominant-baseline="central">A/B test launched</text>
+        <text font-family="DM Sans,sans-serif" font-size="10" fill="#3D3BB5" x="471" y="96" text-anchor="middle" dominant-baseline="central">Week 6</text>
+      </g>
+      <!-- Arrow: A/B → full rollout -->
+      <line x1="546" y1="84" x2="580" y2="84" stroke="#3CBEA8" stroke-width="1.2" marker-end="url(#arr5)"/>
+      <!-- Node: Full rollout -->
+      <g>
+        <rect x="580" y="60" width="78" height="48" rx="6" fill="#E2F4F0" stroke="#3CBEA8" stroke-width="1"/>
+        <text font-family="DM Sans,sans-serif" font-size="11" font-weight="500" fill="#0B7B6A" x="619" y="80" text-anchor="middle" dominant-baseline="central">Full rollout</text>
+        <text font-family="DM Sans,sans-serif" font-size="10" fill="#0B7B6A" x="619" y="96" text-anchor="middle" dominant-baseline="central">W16</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="callout callout-indigo">
+    <div class="cl-label">Critical path dependencies</div>
+    <ul style="padding-left:18px;font-size:13px;display:flex;flex-direction:column;gap:6px;">
+      <li>Payment failure recovery A/B (<strong>week 6</strong>) dependent on granular funnel instrumentation (<strong>week 2</strong>) and data readout (<strong>week 5</strong>)</li>
+      <li>Fee/COD visibility code requires Logistics API readiness</li>
+      <li>Full launch gated on Phase 2 experiment surpassing metrics and QA exit</li>
+    </ul>
+  </div>
+</section>
+
+<div class="footer">Cart Abandonment Reduction · Checkout Experience PRD · Confidential</div>
+</div>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function toggleAcc(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = btn.classList.contains('open');
+  btn.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+</script>
+</body>
+</html>

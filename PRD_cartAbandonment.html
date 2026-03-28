@@ -419,6 +419,70 @@
   .dp-shift-arrow { font-size: 18px; color: var(--teal); flex-shrink: 0; }
 
 
+
+  /* ─── MEASURABLE GOALS TABLE ─── */
+  .mg-table {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .mg-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr 180px;
+    border-bottom: 1px solid var(--border);
+    align-items: stretch;
+  }
+  .mg-goal-cell {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 16px 18px;
+    background: var(--bg);
+    border-right: 1px solid var(--border);
+  }
+  .mg-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--txt-3);
+    min-width: 20px; margin-top: 2px;
+  }
+  .mg-goal-name { font-weight: 500; font-size: 13px; color: var(--txt); line-height: 1.4; margin-bottom: 3px; }
+  .mg-goal-range {
+    font-family: 'Instrument Serif', serif;
+    font-size: 15px; color: var(--indigo); line-height: 1.2;
+  }
+  .mg-phase-cell {
+    padding: 14px 16px;
+    border-right: 1px solid var(--border);
+  }
+  .mg-phase-tag {
+    display: inline-block;
+    font-size: 10px; font-weight: 500; letter-spacing: .07em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 4px; margin-bottom: 6px;
+  }
+  .ph1 { background: var(--amber-lt); color: var(--amber); border: 1px solid var(--amber-mid); }
+  .ph2 { background: var(--indigo-lt); color: var(--indigo); border: 1px solid var(--indigo-mid); }
+  .mg-phase-detail { font-size: 12px; color: var(--txt); line-height: 1.5; margin-bottom: 4px; }
+  .mg-phase-target { font-size: 11px; color: var(--teal); font-weight: 500; }
+  .mg-owner-cell {
+    padding: 14px 16px;
+    font-size: 12px; color: var(--txt-2); line-height: 1.6;
+    display: flex; align-items: center; flex-wrap: wrap; gap: 4px;
+  }
+  .mg-owner-badge {
+    font-size: 10px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase;
+    padding: 1px 6px; border-radius: 3px;
+  }
+  .ph1-badge { background: var(--amber-lt); color: var(--amber); }
+  .ph2-badge { background: var(--indigo-lt); color: var(--indigo); }
+  .mg-footer {
+    font-size: 12px; color: var(--txt-2);
+    padding: 11px 18px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    line-height: 1.6;
+  }
+
   /* ─── IMPACT CALC ─── */
   .calc-step { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); }
   .calc-step:last-child { border-bottom: none; }
@@ -535,7 +599,9 @@
     .cover { padding: 32px 24px; }
     .cover h1 { font-size: 28px; }
     .cover-stats { grid-template-columns: 1fr 1fr; }
-    .grid-2, .grid-3, .grid-4, .ba, .inout, .toc-grid, .synth-body, .dp-grid { grid-template-columns: 1fr; }
+    .grid-2, .grid-3, .grid-4, .ba, .inout, .toc-grid, .synth-body, .dp-grid, .mg-row { grid-template-columns: 1fr; }
+    .mg-goal-cell, .mg-phase-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .mg-owner-cell { border-top: 1px solid var(--border); }
     .synth-divider { display: none; }
     .persona-block-header { flex-wrap: wrap; }
     .feat-head, .feat-row { grid-template-columns: 1fr; }
@@ -814,22 +880,83 @@
     <div class="sh-meta"><div class="sh-num">04</div><h2>Goals</h2></div>
   </div>
   <h3>Measurable goals</h3>
-  <div class="grid-3">
-    <div class="mcard">
-      <div class="mval">65→50%</div>
-      <div class="mlabel">Cart abandonment rate</div>
-      <div class="msub">Within 90 days of Phase 2 launch</div>
+  <div class="mg-table">
+
+    <!-- Goal 1 -->
+    <div class="mg-row">
+      <div class="mg-goal-cell">
+        <div class="mg-num">01</div>
+        <div>
+          <div class="mg-goal-name">Reduce checkout abandonment</div>
+          <div class="mg-goal-range">15 &ndash; 25% reduction</div>
+        </div>
+      </div>
+      <div class="mg-phase-cell">
+        <div class="mg-phase-tag ph1">Phase 1</div>
+        <div class="mg-phase-detail">Fix price transparency (H3) + show COD early (H2)</div>
+        <div class="mg-phase-target">Expected: 10&ndash;15% reduction</div>
+      </div>
+      <div class="mg-phase-cell">
+        <div class="mg-phase-tag ph2">Phase 2</div>
+        <div class="mg-phase-detail">Better flow design + reliability</div>
+        <div class="mg-phase-target">Additional: 5&ndash;10% reduction</div>
+      </div>
+      <div class="mg-owner-cell">
+        <span class="mg-owner-badge ph1-badge">Phase 1</span> major impact &nbsp;&middot;&nbsp; <span class="mg-owner-badge ph2-badge">Phase 2</span> optimisation
+      </div>
     </div>
-    <div class="mcard">
-      <div class="mval">−30%</div>
-      <div class="mlabel">Payment step drop-off</div>
-      <div class="msub">From current baseline</div>
+
+    <!-- Goal 2 -->
+    <div class="mg-row">
+      <div class="mg-goal-cell">
+        <div class="mg-num">02</div>
+        <div>
+          <div class="mg-goal-name">Reduce payment step drop-off</div>
+          <div class="mg-goal-range">15 &ndash; 25% reduction</div>
+        </div>
+      </div>
+      <div class="mg-phase-cell">
+        <div class="mg-phase-tag ph1">Phase 1</div>
+        <div class="mg-phase-detail">Remove price surprise + surface COD early</div>
+        <div class="mg-phase-target">Expected: 12&ndash;18% reduction</div>
+      </div>
+      <div class="mg-phase-cell">
+        <div class="mg-phase-tag ph2">Phase 2</div>
+        <div class="mg-phase-detail">Fix failures (H1) + improve UX flow</div>
+        <div class="mg-phase-target">Additional: 3&ndash;7% reduction</div>
+      </div>
+      <div class="mg-owner-cell">
+        Mostly <span class="mg-owner-badge ph1-badge">Phase 1</span>
+      </div>
     </div>
-    <div class="mcard">
-      <div class="mval">+20%</div>
-      <div class="mlabel">Checkout completion</div>
-      <div class="msub">From baseline</div>
+
+    <!-- Goal 3 -->
+    <div class="mg-row" style="border-bottom:none;">
+      <div class="mg-goal-cell">
+        <div class="mg-num">03</div>
+        <div>
+          <div class="mg-goal-name">Improve checkout completion rate</div>
+          <div class="mg-goal-range">+10 &ndash; 20% lift</div>
+        </div>
+      </div>
+      <div class="mg-phase-cell">
+        <div class="mg-phase-tag ph1">Phase 1</div>
+        <div class="mg-phase-detail">Direct lift from reduced friction</div>
+        <div class="mg-phase-target">Expected: +8&ndash;12%</div>
+      </div>
+      <div class="mg-phase-cell">
+        <div class="mg-phase-tag ph2">Phase 2</div>
+        <div class="mg-phase-detail">Additional gains from reliability + polish</div>
+        <div class="mg-phase-target">Additional: +5&ndash;10%</div>
+      </div>
+      <div class="mg-owner-cell">
+        <span class="mg-owner-badge ph1-badge">Phase 1</span> &amp; <span class="mg-owner-badge ph2-badge">Phase 2</span> shared
+      </div>
     </div>
+
+  </div>
+  <div class="mg-footer">
+    <strong>Phase 1</strong> focuses on eliminating major friction points (price surprise, COD visibility) &mdash; <strong>Phase 2</strong> drives incremental gains through reliability and flow optimisation.
   </div>
   <h3>Immeasurable goals</h3>
   <div class="card" style="display:flex;flex-direction:column;gap:10px;">

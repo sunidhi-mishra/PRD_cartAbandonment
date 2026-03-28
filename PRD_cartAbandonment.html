@@ -483,6 +483,33 @@
     line-height: 1.6;
   }
 
+  /* ─── IMMEASURABLE GOALS ─── */
+  .ig-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .ig-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--border);
+  }
+  .ig-row:last-child { border-bottom: none; }
+  .ig-icon { font-size: 18px; flex-shrink: 0; line-height: 1; }
+  .ig-text { font-size: 14px; color: var(--txt); line-height: 1.6; }
+  .ig-kw {
+    font-weight: 500;
+    padding: 1px 7px;
+    border-radius: 4px;
+    display: inline-block;
+    line-height: 1.5;
+  }
+  .ig-kw-indigo { background: var(--indigo-lt); color: var(--indigo); }
+  .ig-kw-teal   { background: var(--teal-lt);   color: var(--teal); }
+
   /* ─── IMPACT CALC ─── */
   .calc-step { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); }
   .calc-step:last-child { border-bottom: none; }
@@ -959,9 +986,15 @@
     <strong>Phase 1</strong> focuses on eliminating major friction points (price surprise, COD visibility) &mdash; <strong>Phase 2</strong> drives incremental gains through reliability and flow optimisation.
   </div>
   <h3>Immeasurable goals</h3>
-  <div class="card" style="display:flex;flex-direction:column;gap:10px;">
-    <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="font-size:20px;">😌</span> Users should feel <strong>confident</strong> and <strong>unsurprised</strong> throughout checkout.</div>
-    <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="font-size:20px;">⚡</span> The experience should feel <strong>fast</strong>, <strong>transparent</strong>, and <strong>trustworthy</strong>.</div>
+  <div class="ig-wrap">
+    <div class="ig-row">
+      <span class="ig-icon">&#128522;</span>
+      <div class="ig-text">Users should feel <span class="ig-kw ig-kw-indigo">confident</span> and <span class="ig-kw ig-kw-indigo">unsurprised</span> throughout checkout.</div>
+    </div>
+    <div class="ig-row">
+      <span class="ig-icon">&#9889;</span>
+      <div class="ig-text">The experience should feel <span class="ig-kw ig-kw-teal">fast</span>, <span class="ig-kw ig-kw-teal">transparent</span>, and <span class="ig-kw ig-kw-teal">trustworthy</span>.</div>
+    </div>
   </div>
 </section>
 
